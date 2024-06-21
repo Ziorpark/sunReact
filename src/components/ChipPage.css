@@ -1,0 +1,11 @@
+.bg-custom {
+    background-color: #c44dff!important;
+}
+
+.CircularProgressbar .CircularProgressbar-background {
+    fill: red;
+}
+
+.bg-errorbg {
+    background-color: #ff0000!important;
+}

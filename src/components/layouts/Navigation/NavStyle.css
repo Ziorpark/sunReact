@@ -1,0 +1,35 @@
+
+/* NavStyle.css */
+.custom-nav {
+    background-color: #0d2568;
+    color: white;
+}
+
+.custom-nav .nav-link {
+    color: white;
+}
+
+.nav-item {
+    width: 100%; /* 전체 너비 사용 */
+    padding: 20px 0; /* 상하 패딩 추가 */
+}
+
+.nav-item a {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%; /* a 요소가 li 요소 전체를 채우도록 설정 */
+    height: 100%; /* 높이도 li 요소 전체를 채우도록 설정 */
+    color: white;
+    text-decoration: none;
+    padding: 20px 0; /* 상하 패딩 추가 */
+}
+
+.nav-item.active {
+    background-color: white;
+    border-radius: 0.25rem;
+}
+
+.fs-1.active {
+    color: #0d2568;
+}
