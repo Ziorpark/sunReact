@@ -6,8 +6,9 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import reportWebVitals from './reportWebVitals';
 //import Test from './Pages/Main';
 //import App from './components/layouts/Navigation/BootstarpTest';
-
 import LoginLanding from './components/LoginComponent';
+import DBtest from './dbTest/dbTest';
+import DBsend from './dbTest/dbSend';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(

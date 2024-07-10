@@ -5,18 +5,20 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import { Button } from "react-bootstrap";
 import styled from "styled-components";
+import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 const NATION_OPT = [
-    { value: 0, name: { en: "KOREA", kr: "대한민국" } },
-    { value: 1, name: { en: "SPAIN", es: "España", kr: "스페인" } },
-    { value: 2, name: { en: "FRANCE", fr: "France", kr: "프랑스" } },
-    { value: 3, name: { en: "GERMANY", de: "Deutschland", kr: "독일" } },
+    { value: "00", name: { kr: "대한민국" , code: "00"} },
+    { value: "01", name: { kr: "스페인", code: "01" } },
+    { value: "02", name: { kr: "프랑스", code: "02" } },
+    { value: "03", name: { kr: "독일", code: "03" } },
 ];
 
 const USAGE_OPT = [
-    { value: 0, name: { en: "Production", kr: "생산" } },
-    { value: 1, name: { en: "Storage", kr: "저장" } },
-    { value: 2, name: { en: "Consumption", kr: "소비" } },
+    { value: "01", name: { kr: "생산", code: "01" } },
+    { value: "02", name: { kr: "저장", code: "02" } },
+    { value: "03", name: { kr: "소비", code: "03" } },
 ];
 
 const SPSR_OPT = [
@@ -61,11 +63,11 @@ const IconSVG = styled.svg`
 `;
 
 function SelectBox(props) {
-    const { option, onChange } = props;
+    const { option, onChange, value } = props;
 
     return (
         <SelectBoxWrapper>
-            <Select onChange={(e) => onChange(e.target.value)}>
+            <Select value={value} onChange={(e) => onChange(e.target.value)}>
                 {option.map((option) => (
                     <option
                         key={option.value} value={option.value}>
@@ -81,8 +83,8 @@ function SelectBox(props) {
                 xmlns="http://www.w3.org/2000/svg"
             >
                 <path
-                    fill-rule="evenodd"
-                    clip-rule="evenodd"
+                    fillRule="evenodd"
+                    clipRule="evenodd"
                     d="M10 14L16 6H4L10 14Z"
                     fill="#1A1A1A"
                 />
@@ -93,23 +95,44 @@ function SelectBox(props) {
 
 function MainPage() {
 
-    const [nation, setNation] = useState(NATION_OPT[0].value);
-    const [usage, setUsage] = useState(USAGE_OPT[0].value);
-    const [spsr, setSpsr] = useState(SPSR_OPT[0].value);
+    const getInitialState = (key, options) => {
+        const savedValue = localStorage.getItem(key);
+        return savedValue !== null ? savedValue : options[0].value;
+    };
     
-    //Connect Event 등록
+    const [nation, setNation] = useState(() => getInitialState("Selected_nation", NATION_OPT));
+    const [usage, setUsage] = useState(() => getInitialState("Selected_usage", USAGE_OPT));
+    const [spsr, setSpsr] = useState(() => getInitialState("Selected_spsr", SPSR_OPT));
+
+    const navigate = useNavigate();
+
     const OnClickConnect = () => {
-        sessionStorage.setItem("Selected_nation", nation);
-        sessionStorage.setItem("Selected_usage", usage);
-        sessionStorage.setItem("Selected_spsr", spsr);
+        localStorage.setItem("Selected_nation", nation);
+        localStorage.setItem("Selected_usage", usage);
+        localStorage.setItem("Selected_spsr", spsr);
+
+        const spsrnum = nation + usage + spsr;
+
+        console.log(`Fetching data for spsrNum: ${spsrnum}`);
+        localStorage.setItem('spsrNum', spsrnum);
+        
+        axios.get(`http://localhost:4000/api/chipdata`, { params: { spsrNum: spsrnum } }) // 수정된 부분
+            .then(response => {
+                //console.log('Data received:', response.data);
+                //localStorage.setItem('chipData', JSON.stringify(response.data));
+                navigate('/Chip');
+            })
+            .catch(error => {
+                console.error('Error fetching data:', error);
+                alert('There was an error fetching the data!');
+            });
 
         alert("선택 완료!");
     };
-
-
+    
     return (
-        <div class="container-fluid">
-            <div class="row">
+        <div className="container-fluid">
+            <div className="row">
                 <NavPage />
                 <div className="col-sm p-3 d-flex justify-content-center align-items-center" style={{ minHeight: '100vh' }}>
                 <Container style={{ fontSize: 25 }}>
@@ -117,7 +140,7 @@ function MainPage() {
                         <Col></Col>
                         <Col xs={5}>
                             <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
-                                <span style={{marginRight : 30}}>국 가 :</span> <SelectBox option={NATION_OPT} onChange={setNation} />
+                                <span style={{marginRight : 30}}>국 가 :</span> <SelectBox option={NATION_OPT} onChange={setNation} value={nation}/>
                             </div>
                         </Col>
                         <Col></Col>
@@ -126,7 +149,7 @@ function MainPage() {
                         <Col></Col>
                         <Col xs={5}>
                             <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
-                                <span style={{marginRight : 30}}>구 분 :</span> <SelectBox option={USAGE_OPT} onChange={setUsage} />
+                                <span style={{marginRight : 30}}>구 분 :</span> <SelectBox option={USAGE_OPT} onChange={setUsage} value={usage} />
                             </div>
                         </Col>
                         <Col></Col>
@@ -135,7 +158,7 @@ function MainPage() {
                         <Col></Col>
                         <Col xs={5}>
                             <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
-                                <span style={{marginRight : 30}}>SPSR :</span> <SelectBox option={SPSR_OPT} onChange={setSpsr} />
+                                <span style={{marginRight : 30}}>SPSR :</span> <SelectBox option={SPSR_OPT} onChange={setSpsr} value={spsr}/>
                             </div>
                         </Col>
                         <Col></Col>

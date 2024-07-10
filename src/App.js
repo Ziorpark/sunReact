@@ -38,6 +38,7 @@ function SunProject() {
         <Route path='/Main' element={<MainPage />} />
         <Route path='/Chip' element={<ChipPage />} />
         <Route path='/Graph/:chipId' element={<GraphPage />} />
+        <Route path='/' element={<LoginPage />} /> {/* 기본 루트 */}
       </Routes>
     </BrowserRouter>
   )

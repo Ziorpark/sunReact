@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
-import { CircularProgressbarWithChildren, buildStyles } from 'react-circular-progressbar';
+import { CircularProgressbarWithChildren } from 'react-circular-progressbar';
 import ProgressBar from 'react-bootstrap/ProgressBar';
 import "./ChipPage.css";
 
@@ -59,7 +59,7 @@ function ChipInfo(props) {
 
     //Status
     const [chipStatus, setStatus] = useState('NORMAL');
-    const [isError, setError] = useState(false);
+    const [iserror, setError] = useState(false);
 
     useEffect(() => {
         if (statuscode === '000') {
@@ -85,10 +85,10 @@ function ChipInfo(props) {
     return (
         <>
         <div style={{ marginBottom: 20, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-            <span style={{ fontSize : 25, color: isError ? 'red' : ""}}>{chipName} : {chipStatus}</span> 
+            <span style={{ fontSize : 25, color: iserror ? 'red' : ""}}>{chipName} : {chipStatus}</span> 
             <div style={{ display : 'block', textAlign: 'center'}}>
                 <div style={{fontSize: 11}}>on/off</div>
-                <ToggleContainer onClick={toggleHandler} isError={isError}>
+                <ToggleContainer onClick={toggleHandler}>
                     <div className={`toggle-container ${isOn ? "toggle--checked" : ""}`} />
                     <div className={`toggle-circle ${isOn ? "toggle--checked" : ""}`} />
                 </ToggleContainer>
@@ -98,42 +98,40 @@ function ChipInfo(props) {
         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
             <div onClick={() => handleCircularClick(`/Graph/${chipName}`)} >
                 <CircularProgressbarWithChildren value={voltValue}
-                    background={ isError }  
                     styles={{
                         root: {},
-                        path: { stroke: `${isError ? 'red' : circleColor}` },
+                        path: { stroke: `${iserror ? 'red' : circleColor}` },
                         trail: {},
                     }} 
-
                 >
                     <div style={{ fontSize: 13, color: 'black' }}>{isOn ? 'On' : 'Off'}</div>
-                    <div style={{ fontSize: 20, color: isError ? 'black' : 'grey' }}>VOLT</div>
-                    <div style={{ fontSize: 20, marginTop: -5, color: isError ? 'black' : 'black' }}>
-                    <strong>{voltValue}%</strong>
+                    <div style={{ fontSize: 20, color: iserror ? 'black' : 'grey' }}>VOLT</div>
+                    <div style={{ fontSize: 20, marginTop: -5, color: iserror ? 'black' : 'black' }}>
+                        <strong>{voltValue}V</strong>
                     </div>
                 </CircularProgressbarWithChildren>
             </div>
             <div style={{ marginTop: 20, width: '100%' }}>
-                <ProgressBar now={ahValue} variant={isError ? "errorbg" : progressColor}/>
+                <ProgressBar now={ahValue} variant={iserror ? "errorbg" : progressColor}/>
                 <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom:10 }}>
-                    <span style={{ color: isError ? 'red' : 'grey' }}>Ah</span>
-                    <span style={{ color: isError ? 'red' : 'black' }}>0.0</span>
+                    <span style={{ color: iserror ? 'red' : 'grey' }}>Ah</span>
+                    <span style={{ color: iserror ? 'red' : 'black' }}>{ahValue}</span>
                 </div>
-                <ProgressBar now={tempValue} variant={isError ? "errorbg" : progressColor}/>
+                <ProgressBar now={tempValue} variant={iserror ? "errorbg" : progressColor}/>
                 <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom:10 }}>
-                    <span style={{ color: isError ? 'red' : 'grey' }}>TEMP</span>
-                    <span style={{ color: isError ? 'red' : 'black' }}>0.0</span>
+                    <span style={{ color: iserror ? 'red' : 'grey' }}>TEMP</span>
+                    <span style={{ color: iserror ? 'red' : 'black' }}>{tempValue}</span>
                 </div>
-                <ProgressBar now={wattValue} variant={isError ? "errorbg" : progressColor}/>
+                <ProgressBar now={wattValue} variant={iserror ? "errorbg" : progressColor}/>
                 <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom:10 }}>
-                    <span style={{ color: isError ? 'red' : 'grey' }}>WATT</span>
-                    <span style={{ color: isError ? 'red' : 'black' }}>0.0</span>
+                    <span style={{ color: iserror ? 'red' : 'grey' }}>WATT</span>
+                    <span style={{ color: iserror ? 'red' : 'black' }}>{wattValue}</span>
                 </div>
                 {/* 배터리 용량 정보, 추후 처리 결정요망
-                <ProgressBar now={batteryValue} variant={isError ? "errorbg" : progressColor}/>
+                <ProgressBar now={batteryValue} variant={iserror ? "errorbg" : progressColor}/>
                 <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom:10 }}>
-                    <span style={{ color: isError ? 'red' : 'grey' }}>BATTERY</span>
-                    <span style={{ color: isError ? 'red' : 'black' }}>0.0</span>
+                    <span style={{ color: iserror ? 'red' : 'grey' }}>BATTERY</span>
+                    <span style={{ color: iserror ? 'red' : 'black' }}>0.0</span>
                 </div>
                 */}
                 
